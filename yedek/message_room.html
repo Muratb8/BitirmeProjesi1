@@ -1,0 +1,247 @@
+<!DOCTYPE html> 
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kulüpler</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+        }
+        .sidebar {
+            background-color: #2E49A5;
+            color: white;
+            min-height: 100vh;
+        }
+        .sidebar a {
+            color: #adb5bd;
+            text-decoration: none;
+            padding: 12px;
+            display: block;
+        }
+        .sidebar a:hover {
+            background-color: #0E315A;
+            color: white;
+            border-left: 4px solid #0d6efd;
+        }
+        .profile-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid #0d6efd;
+            object-fit: cover;
+        }
+        .club-container {
+            position: absolute;
+            top: 50px;
+            left: 320px; /* Biraz daha sağa kaydırıldı */
+            display: flex;
+            flex-direction: column;
+        }
+        .club-box {
+            background-color: #ffffff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 15px 60px; /* Dikey küçültüldü, yatay büyütüldü */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, background-color 0.3s;
+            font-size: 1.2rem;
+            text-align: center;
+            cursor: pointer;
+        }
+        .club-box + .club-box {
+            margin-top: 0; /* Aradaki boşluk kaldırıldı */
+        }
+        .club-box:hover {
+            transform: scale(1.05);
+            background-color: #f8f9fa;
+        }
+        .club-box.active {
+            background-color: #0d6efd;
+            color: white;
+        }
+        footer {
+            background-color: #212529;
+            color: white;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        .notification-dot {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 20px;
+    border-radius: 50%;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.club-box {
+    position: relative; /* Kareyi doğru konumlandırmak için relative konumlandırma */
+}
+
+
+
+.club-box.active::after {
+    background-color: #0d6efd; /* Tıklandığında kare görünür hale gelir */
+}
+
+.selected-box {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background-color: rgba(0, 123, 255, 0.5);
+    border: 2px solid #007bff;
+    display: none; /* Başlangıçta görünmez */
+    z-index: 10;
+    transition: all 0.3s ease-in-out;
+}
+.chat-box {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60%;
+    height: 70%;
+    background-color: #ffffff;
+    border: 2px solid #0d6efd;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    display: none; /* Başlangıçta görünmez */
+    overflow: hidden;
+}
+
+.chat-box-header {
+    background-color: #0d6efd;
+    color: white;
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.chat-box-content {
+    padding: 20px;
+    overflow-y: auto;
+    height: calc(100% - 60px);
+    font-size: 1rem;
+}
+.badge-notify {
+            background-color: red;
+            position: absolute;
+            top: 8px;
+            right: 10px;
+            font-size: 0.8em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav class="col-md-3 col-lg-2 sidebar d-none d-md-block position-relative">
+                <h4 class="text-center py-4"><img src="DAÜ.png"></h4>
+                <a href="index.html"><i class="bi bi-house-door"></i> Ana Sayfa</a>
+                <a href="kulub.html"><i class="bi bi-people"></i> Kulüpler</a>
+                <a href="message_room.html"><i class="bi bi-chat-dots"></i> Sohbet Odası</a>
+                <a href="bildirim.html" class="position-relative">
+                    <i class="bi bi-bell"></i> Bildirimler
+                    <span class="badge badge-notify">3</span>
+                </a>
+                <a href="etkinlik.html"><i class="bi bi-calendar"></i> Etkinlikler</a>
+                <a href="ders_cizergesi.html"><i class="bi bi-calendar"></i> Ders Çizergesi</a>
+                <a href="secim.html"><i class="bi bi-calendar"></i> Baskanlık Seçimi</a>
+                <a href="Etkinlik_yaratma.html"><i class="bi bi-calendar"></i> Etkinlik Yaratma</a>
+                <a href="kulup_bilgileri(baskan).html"><i class="bi bi-calendar"></i> Kulub bilgileri</a>
+            </nav>
+            
+
+            <!-- Mobil Hamburger Menü -->
+            <nav class="navbar navbar-dark bg-dark d-md-none">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="#">Menü</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </div>
+            </nav>
+            <div class="collapse d-md-none" id="mobileMenu">
+                <a href="index.html" class="d-block text-dark bg-light p-2">Ana Sayfa</a>
+                <a href="kulub.html" class="d-block text-dark bg-light p-2">Kulüpler</a>
+                <a href="message_room.html" class="d-block text-dark bg-light p-2">Sohbet Odası</a>
+                <a href="bildirim.html" class="d-block text-dark bg-light p-2">Bildirimler</a>
+                <a href="etkinlik.html" class="d-block text-dark bg-light p-2">Etkinlikler</a>
+                <a href="ders_cizergesi.html" class="d-block text-dark bg-light p-2">Ders Çizergesi</a>
+            </div>
+            <main class="col-md-9 col-lg-10 p-4">
+               
+                <div class="club-container">
+                    <div class="club-box">Spor Kulübü</div>
+                    <span class="notification-dot">2</span>
+                    <div class="club-box">Sanat Kulübü</div>
+                    <div class="club-box">Bilim Kulübü</div>
+                    <div class="club-box">Müzik Kulübü</div>
+                    <div class="club-box">Tiyatro Kulübü</div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+   <script>
+    // Sohbet alanını oluştur
+    const chatBox = document.createElement('div');
+    chatBox.classList.add('chat-box');
+    chatBox.innerHTML = `
+        <div class="chat-box-header">Kulüp Sohbeti</div>
+        <div class="chat-box-content">Bu kulüple ilgili sohbet alanı buraya gelir.</div>
+    `;
+    document.body.appendChild(chatBox);
+
+    // Tüm kulüp kutularını seç
+    const clubBoxes = document.querySelectorAll('.club-box');
+    let activeBox = null;
+
+    clubBoxes.forEach(box => {
+        box.addEventListener('click', () => {
+            // Eğer zaten aktif olan kutuya tıklandıysa sohbet kutusunu kapat
+            if (activeBox === box) {
+                chatBox.style.display = 'none';
+                box.classList.remove('active');
+                activeBox = null;
+            } else {
+                // Önceki seçimi sıfırla
+                if (activeBox) {
+                    activeBox.classList.remove('active');
+                }
+
+                // Yeni kutuyu aktif yap
+                box.classList.add('active');
+                activeBox = box;
+
+                // Sohbet kutusunu göster ve içeriğini güncelle
+                chatBox.querySelector('.chat-box-header').textContent = `${box.textContent} Sohbeti`;
+                chatBox.querySelector('.chat-box-content').textContent = `${box.textContent} hakkında konuşmalar burada yer alacak.`;
+                chatBox.style.display = 'block';
+            }
+        });
+    });
+</script>
+</body>
+</html>
