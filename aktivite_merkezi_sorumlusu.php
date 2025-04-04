@@ -61,24 +61,13 @@ $role = $_SESSION['role']; // Kullanıcının rolünü al
             background-color: #495057;
             border-radius: 4px;
         }
-        .toggle-btn {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            z-index: 1000;
-        }
-        
     </style>
 </head>
 <body>
-    
+<div class="container-fluid">
+<div class="row">
 <?php include 'includes/sidebar.php'; ?>
-      
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 mt-4" id="content">
     <div class="content" id="content">
       
         <div class="container">
@@ -182,14 +171,9 @@ $role = $_SESSION['role']; // Kullanıcının rolünü al
             </div>
         </div>
     </div>
-
-    <script>
-           document.getElementById("toggleSidebar").addEventListener("click", function () {
-            document.getElementById("sidebar").classList.toggle("collapsed");
-        });
-
-      
-    </script>
+    </main>
+    </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
