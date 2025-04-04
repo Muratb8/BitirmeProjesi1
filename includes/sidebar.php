@@ -2,7 +2,11 @@
 
 <!-- Sidebar -->
 <nav class="col-md-3 col-lg-2 sidebar d-none d-md-block position-relative" id="sidebar">
-    <h4 class="text-center py-4"><img src="DAÜ.png"></h4>
+<h4 class="text-center py-4">
+        <a href="index.php">
+            <img src="DAÜ.png" alt="DAÜ Logo">
+        </a>
+    </h4>
     
     <?php if ($role === 'student'): ?>
         <a href="index.php"><i class="bi bi-house-fill"></i> Ana Sayfa</a>
