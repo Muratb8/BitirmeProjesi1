@@ -372,13 +372,13 @@ if($role == 'developer'){
                     </div>
                 </div>
             </main>
-            <?php include_once '../includes/right_top_menu.php'; ?>
+ 
         </div>
       
     </div>
 
 
-
+    <?php include_once '../includes/right_top_menu.php'; ?>
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 

@@ -160,7 +160,7 @@ $role = $_SESSION['role']; // Kullanıcının rolünü al
                 </tbody>
             </table>
         </div>
-
+        <?php include_once '../includes/right_top_menu.php'; ?>
     <!-- Bootstrap JS, Popper.js, and jQuery -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 

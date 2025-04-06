@@ -95,6 +95,7 @@ $role = $_SESSION['role']; // Kullanıcının rolünü al
 </main>
         </div>
         </div>
+        <?php include_once '../includes/right_top_menu.php'; ?>
         <script>
             const checkboxes = document.querySelectorAll('.candidate-checkbox');
             const selectionInfo = document.getElementById('selectionInfo');
