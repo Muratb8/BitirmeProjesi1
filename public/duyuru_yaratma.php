@@ -7,7 +7,7 @@
     <?php
 session_start();
 if (!isset($_SESSION['id'])) {
-    header("Location: giris.php");
+    header("Location: ../public/giris.php");
     exit();
 }
 
@@ -16,7 +16,7 @@ $role = $_SESSION['role']; // Kullanıcının rolünü al
 ?>
 
     <!-- Harici CSS dosyası -->
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Google Fonts -->
@@ -44,7 +44,7 @@ $role = $_SESSION['role']; // Kullanıcının rolünü al
     <div class="container-fluid">
         <div class="row">
 
-        <?php include 'includes/sidebar.php'; ?>
+        <?php include '../includes/sidebar.php'; ?>
             <!-- Main Content -->
             <div class="col-md-9 col-lg-10">
                 <!-- Sağ Üst Köşe İkonlar -->
@@ -101,7 +101,7 @@ $role = $_SESSION['role']; // Kullanıcının rolünü al
             </div>
         </div>
     </div>
-
+    <?php include_once '../includes/right_top_menu.php'; ?>
     <!-- Bootstrap JS ve Popper -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>

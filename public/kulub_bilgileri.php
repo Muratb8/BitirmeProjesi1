@@ -6,14 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kulüp Üye Listesi</title>
         <!-- Harici CSS dosyası -->
-        <link rel="stylesheet" href="assets/css/style.css">
+        <link rel="stylesheet" href="../assets/css/style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <?php
 session_start();
 if (!isset($_SESSION['id'])) {
-    header("Location: giris.php");
+    header("Location: ../public/giris.php");
     exit();
 }
 $role = $_SESSION['role']; // Kullanıcının rolünü al
@@ -24,7 +24,7 @@ $role = $_SESSION['role']; // Kullanıcının rolünü al
 <body>
     <div class="container-fluid">
         <div class="row">
-        <?php include 'includes/sidebar.php'; ?>
+        <?php include '../includes/sidebar.php'; ?>
             <!-- Main Content -->
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                 <!-- Sağ Üst Köşe İkonlar -->
@@ -129,10 +129,9 @@ $role = $_SESSION['role']; // Kullanıcının rolünü al
             </main>
         </div>
     </div>
+    <?php include_once '../includes/right_top_menu.php'; ?>
 <script>
-      document.getElementById("toggleSidebar").addEventListener("click", function () {
-            document.getElementById("sidebar").classList.toggle("collapsed");
-        });
+ 
 </script>
 </body>
 

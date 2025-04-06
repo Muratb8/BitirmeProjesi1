@@ -79,7 +79,7 @@
 
         $.ajax({
             type: 'POST',
-            url: 'login.php',
+            url: '../backend/login.php',
             data: { email: email, password: password },
             dataType: 'json',
             success: function (response) {

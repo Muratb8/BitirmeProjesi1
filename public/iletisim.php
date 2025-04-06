@@ -7,14 +7,14 @@
     <?php
 session_start();
 if (!isset($_SESSION['id'])) {
-    header("Location: giris.php");
+    header("Location: ../public/giris.php");
     exit();
 }
 $role = $_SESSION['role']; // Kullanıcının rolünü al
 
 ?>
     <!-- Harici CSS dosyası -->
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
@@ -117,7 +117,7 @@ h2 {
 </head>
 <body>
 
-<?php include 'includes/sidebar.php'; ?>
+<?php include '../includes/sidebar.php'; ?>
     <button id="toggleSidebar" class="btn btn-primary position-fixed" style="top: 10px; left: 10px; z-index: 1000;">
         <i class="bi bi-list"></i>
     </button>
@@ -170,12 +170,8 @@ h2 {
         </div>
 
     </div>
-
+    <?php include_once '../includes/right_top_menu.php'; ?>
     <script>
-        document.getElementById("toggleSidebar").addEventListener("click", function () {
-            document.getElementById("sidebar").classList.toggle("collapsed");
-        });
-
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>

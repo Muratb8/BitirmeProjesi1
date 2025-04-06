@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kulüpler</title>
         <!-- Harici CSS dosyası -->
-        <link rel="stylesheet" href="assets/css/style.css">
+        <link rel="stylesheet" href="../assets/css/style.css">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Google Fonts -->
@@ -15,7 +15,7 @@
     <?php
 session_start();
 if (!isset($_SESSION['id'])) {
-    header("Location: giris.php");
+    header("Location: ../public/giris.php");
     exit();
 }
 
@@ -97,7 +97,7 @@ $role = $_SESSION['role']; // Kullanıcının rolünü al
     <div class="container-fluid">
         <div class="row">
 
-        <?php include 'includes/sidebar.php'; ?>
+        <?php include '../includes/sidebar.php'; ?>
             <!-- Mobil Hamburger Menü -->
             <nav class="navbar navbar-dark bg-dark d-md-none">
                 <div class="container-fluid">
@@ -140,19 +140,19 @@ $role = $_SESSION['role']; // Kullanıcının rolünü al
                 </thead>
                 <tbody>
                     <tr>
-                        <td><img src="apple.png" class="club-logo" alt="Kulüp 1"></td>
+                        <td><img src="../uploads/apple.png" class="club-logo" alt="Kulüp 1"></td>
                         <td>Müzik Sevenler Kulübü</td>
                         <td class="status">Başvurulmadı</td>
                         <td><button class="btn btn-apply btn-custom" onclick="toggleApplication(this)">Başvur</button></td>
                     </tr>
                     <tr>
-                        <td><img src="facebook.png" class="club-logo" alt="Kulüp 2"></td>
+                        <td><img src="../uploads/facebook.png" class="club-logo" alt="Kulüp 2"></td>
                         <td>Kitap Kulübü</td>
                         <td class="status">Başvurulmadı</td>
                         <td><button class="btn btn-apply btn-custom" onclick="toggleApplication(this)">Başvur</button></td>
                     </tr>
                     <tr>
-                        <td><img src="instagram.png" class="club-logo" alt="Kulüp 3"></td>
+                        <td><img src="../uploads/instagram.png" class="club-logo" alt="Kulüp 3"></td>
                         <td>Spor Kulübü</td>
                         <td class="status">Başvurulmadı</td>
                         <td><button class="btn btn-apply btn-custom" onclick="toggleApplication(this)">Başvur</button></td>
@@ -165,9 +165,6 @@ $role = $_SESSION['role']; // Kullanıcının rolünü al
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-          document.getElementById("toggleSidebar").addEventListener("click", function () {
-            document.getElementById("sidebar").classList.toggle("collapsed");
-        });
         function toggleApplication(button) {
             var row = button.closest("tr");
             var statusCell = row.querySelector(".status");

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kulüpler</title>
       <!-- Harici CSS dosyası -->
-      <link rel="stylesheet" href="assets/css/style.css">
+      <link rel="stylesheet" href="../assets/css/style.css">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Google Fonts -->
@@ -14,7 +14,7 @@
     <?php
 session_start();
 if (!isset($_SESSION['id'])) {
-    header("Location: giris.php");
+    header("Location: ../public/giris.php");
     exit();
 }
 $role = $_SESSION['role']; // Kullanıcının rolünü al
@@ -131,7 +131,7 @@ $role = $_SESSION['role']; // Kullanıcının rolünü al
 <body>
     <div class="container-fluid">
         <div class="row">
-        <?php include 'includes/sidebar.php'; ?>
+        <?php include '../includes/sidebar.php'; ?>
             <!-- Mobil Hamburger Menü -->
             <nav class="navbar navbar-dark bg-dark d-md-none">
                 <div class="container-fluid">

@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Güzelleştirilmiş Ana Sayfa</title>
+    <title> Ana Sayfa</title>
 
     <!-- Harici CSS dosyası -->
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <!-- Custom CSS -->
     <?php
-require_once 'database.php'; // Mevcut veritabanı sınıfını dahil et
+require_once '../backend/database.php'; // Mevcut veritabanı sınıfını dahil et
 session_start();
 if (!isset($_SESSION['id'])) {
-    header("Location: giris.php");
+    header("Location: ../public/giris.php");
     exit();
 }
 if (isset($_SESSION['message'])) {
@@ -66,25 +66,9 @@ if($role == 'developer'){
 <body>
     <div class="container-fluid">
         <div class="row">   
-            <?php include 'includes/sidebar.php'; ?>
+            <?php include_once '../includes/sidebar.php'; ?>
             <!-- Mobil Hamburger Menü -->
-            <nav class="navbar navbar-dark bg-dark d-md-none">
-                <div class="container-fluid">
-                    <a class="navbar-brand" href="#">Menü</a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                </div>
-            </nav>
-            
-            <div class="collapse d-md-none" id="mobileMenu">
-                <a href="index.html" class="d-block text-dark bg-light p-2">Ana Sayfa</a>
-                <a href="kulub.html" class="d-block text-dark bg-light p-2">Kulüpler</a>
-                <a href="message_room.html" class="d-block text-dark bg-light p-2">Sohbet Odası</a>
-                <a href="bildirim.html" class="d-block text-dark bg-light p-2">Bildirimler</a>
-                <a href="etkinlik.html" class="d-block text-dark bg-light p-2">Etkinlikler</a>
-                <a href="ders_cizergesi.html" class="d-block text-dark bg-light p-2">Ders Çizergesi</a>
-            </div>
+            <?php include_once '../includes/mobil_menu.php'; ?>
            
             <!-- Ana İçerik -->
             <main class="col-md-9 col-lg-10 p-4">
@@ -373,10 +357,10 @@ if($role == 'developer'){
                     <input type="text" class="form-control" id="managersoyad" name="managersoyad" >
                 </div>
                 <button id="managersaveButton" class="btn btn-primary">Kaydet</button>
-            </div>
-        </div>
-    </div>
-</div>
+                 </div>
+                    </div>
+                           </div>
+                                </div>
 
 
                     <div class="col-md-6">
@@ -388,25 +372,17 @@ if($role == 'developer'){
                     </div>
                 </div>
             </main>
+            <?php include_once '../includes/right_top_menu.php'; ?>
         </div>
+      
     </div>
 
-    <!-- Sağ Üst Köşe İkonlar -->
-    <div class="top-icons">
-        <i class="bi bi-moon"></i> <!-- Gece Modu İkonu -->
-        <i class="bi bi-bell"></i> <!-- Bildirim Çanı İkonu -->
-        <i class="bi bi-chat-dots"></i> <!-- Mesajlar İkonu -->
-        <i class="bi bi-person-circle"></i> <!-- Profil İkonu -->
-    </div>
 
 
     <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-
-
-
 document.getElementById('saveButton').addEventListener('click', function () {
     let user_id = document.getElementById('studentSelect').value;
     let first_name = document.getElementById('firstName').value;
@@ -432,7 +408,7 @@ document.getElementById('saveButton').addEventListener('click', function () {
     formData.append("birth_date", birth_date);
     formData.append("gender", gender);
 
-    fetch("update_student.php", {
+    fetch("../backend/update_student.php", {
         method: "POST",
         body: formData
     })
@@ -506,7 +482,7 @@ document.getElementById('saveButton').addEventListener('click', function () {
     formData.append("soyad", soyad);
 
 
-    fetch("update_president.php", {
+    fetch("../backend/update_president.php", {
         method: "POST",
         body: formData
     })
@@ -555,7 +531,7 @@ document.getElementById('saveButton').addEventListener('click', function () {
     formData.append("soyad", soyad);
 
 
-    fetch("update_manager.php", {
+    fetch("../backend/update_manager.php", {
         method: "POST",
         body: formData
     })

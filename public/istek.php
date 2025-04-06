@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Etkinlik Çizelgesi</title>
         <!-- Harici CSS dosyası -->
-        <link rel="stylesheet" href="assets/css/style.css">
+        <link rel="stylesheet" href="../assets/css/style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <?php
 session_start();
 if (!isset($_SESSION['id'])) {
-    header("Location: giris.php");
+    header("Location: ../public/giris.php");
     exit();
 }
 
@@ -102,10 +102,11 @@ $role = $_SESSION['role']; // Kullanıcının rolünü al
     </style>
 </head>
 <body>
-<?php include 'includes/sidebar.php'; ?>
-<button id="toggleSidebar" class="btn btn-primary position-fixed" style="top: 10px; left: 10px; z-index: 1000;">
-    <i class="bi bi-list"></i>
-</button>
+
+<div class="container-fluid">
+<div class="row">
+<?php include '../includes/sidebar.php'; ?>
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 mt-4" id="content">
     <div class="content" id="content">
         <div class="container">
             <h2>Etkinlik Çizelgesi</h2>
@@ -132,11 +133,12 @@ $role = $_SESSION['role']; // Kullanıcının rolünü al
             </div>
         </div>
     </div>
+    </main>
+    </div>
+    </div>
+    <?php include_once '../includes/right_top_menu.php'; ?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        document.getElementById("toggleSidebar").addEventListener("click", function () {
-            document.getElementById("sidebar").classList.toggle("collapsed");
-        });
     </script>
 
  
