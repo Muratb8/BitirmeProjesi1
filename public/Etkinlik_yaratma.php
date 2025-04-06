@@ -74,15 +74,6 @@ $role = $_SESSION['role']; // Kullanıcının rolünü al
         <?php include '../includes/sidebar.php'; ?>
     <div class="container">
         <h2 class="form-title">Etkinlik Yaratma</h2>
-        <!-- Sağ Üst Köşe İkonlar -->
- <div class="top-icons">
-    <i class="bi bi-moon"></i> <!-- Gece Modu İkonu -->
-    <i class="bi bi-bell"></i> <!-- Bildirim Çanı İkonu -->
-    <i class="bi bi-chat-dots"></i> <!-- Mesajlar İkonu -->
-    <i class="bi bi-person-circle"></i> <!-- Profil İkonu -->
-
-    
-</div>
 
 
         <form>

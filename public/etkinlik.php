@@ -93,13 +93,6 @@ $role = $_SESSION['role']; // Kullanıcının rolünü al
             </div>
 
             <main class="col-md-9 col-lg-10 p-4">
-                <!-- Sağ Üst Köşe İkonlar -->
- <div class="top-icons">
-    <i class="bi bi-moon"></i> <!-- Gece Modu İkonu -->
-    <i class="bi bi-bell"></i> <!-- Bildirim Çanı İkonu -->
-    <i class="bi bi-chat-dots"></i> <!-- Mesajlar İkonu -->
-    <i class="bi bi-person-circle"></i> <!-- Profil İkonu -->
-</div>
        
                 <!-- Etkinlik Kutuları -->
                 <div class="event-container">

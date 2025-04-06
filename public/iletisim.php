@@ -118,9 +118,6 @@ h2 {
 <body>
 
 <?php include '../includes/sidebar.php'; ?>
-    <button id="toggleSidebar" class="btn btn-primary position-fixed" style="top: 10px; left: 10px; z-index: 1000;">
-        <i class="bi bi-list"></i>
-    </button>
 
     <div class="content" id="content">
         <h2>Önemli Kişiler</h2>
