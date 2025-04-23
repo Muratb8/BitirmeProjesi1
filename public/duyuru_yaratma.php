@@ -45,6 +45,7 @@ $role = $_SESSION['role']; // Kullanıcının rolünü al
         <div class="row">
 
         <?php include '../includes/sidebar.php'; ?>
+        <?php include '../includes/mobil_menu.php'?>
             <!-- Main Content -->
             <div class="col-md-9 col-lg-10">
                 <div class="container">

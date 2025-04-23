@@ -98,35 +98,10 @@ $role = $_SESSION['role']; // Kullanıcının rolünü al
         <div class="row">
 
         <?php include '../includes/sidebar.php'; ?>
-            <!-- Mobil Hamburger Menü -->
-            <nav class="navbar navbar-dark bg-dark d-md-none">
-                <div class="container-fluid">
-                    <a class="navbar-brand" href="#">Menü</a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                </div>
-            </nav>
-
-            <div class="collapse d-md-none" id="mobileMenu">
-                <a href="index.html" class="d-block text-dark bg-light p-2">Ana Sayfa</a>
-                <a href="kulub.html" class="d-block text-dark bg-light p-2">Kulüpler</a>
-                <a href="message_room.html" class="d-block text-dark bg-light p-2">Sohbet Odası</a>
-                <a href="bildirim.html" class="d-block text-dark bg-light p-2">Bildirimler</a>
-                <a href="etkinlik.html" class="d-block text-dark bg-light p-2">Etkinlikler</a>
-                <a href="ders_cizergesi.html" class="d-block text-dark bg-light p-2">Ders Çizergesi</a>
-            </div>
-
+        <?php include '../includes/mobil_menu.php'?>
+        <?php include '../includes/right_top_menu.php'?>
            
             <main class="col-md-9 col-lg-10 p-4">
-                <!-- Sağ Üst Köşe İkonlar -->
- <div class="top-icons">
-    <i class="bi bi-moon"></i> <!-- Gece Modu İkonu -->
-    <i class="bi bi-bell"></i> <!-- Bildirim Çanı İkonu -->
-    <i class="bi bi-chat-dots"></i> <!-- Mesajlar İkonu -->
-    <i class="bi bi-person-circle"></i> <!-- Profil İkonu -->
-</div>
-
 
             <!-- Kulüpler Tablosu -->
             <table class="table table-bordered table-striped">

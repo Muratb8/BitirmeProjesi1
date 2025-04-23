@@ -2,7 +2,14 @@
 session_start();
 include_once 'database.php';
 
+if (!isset($_SESSION['id'])) {
+    echo json_encode(['success' => false, 'message' => 'Oturum açmanız gerekiyor']);
+    exit();
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+    
     $db = new Database();
     $db->getConnection(); // Veritabanı bağlantısını sağla
     // Verileri al

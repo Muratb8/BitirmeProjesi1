@@ -19,6 +19,11 @@ if (!isset($_SESSION['id'])) {
 }
 $role = $_SESSION['role']; // Kullanıcının rolünü al
 
+// Veritabanı bağlantısı ve kulüpleri çekme
+require_once 'database.php';
+$db = new Database();
+$db->getConnection();
+$clubs = $db->getData('clubs', 'id, name, clubpresident_id');
 ?>
     <!-- Custom CSS -->
     <style>
@@ -133,79 +138,80 @@ $role = $_SESSION['role']; // Kullanıcının rolünü al
         <div class="row">
         <?php include '../includes/sidebar.php'; ?>
             <!-- Mobil Hamburger Menü -->
-            <nav class="navbar navbar-dark bg-dark d-md-none">
-                <div class="container-fluid">
-                    <a class="navbar-brand" href="#">Menü</a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                </div>
-            </nav>
-            <div class="collapse d-md-none" id="mobileMenu">
-                <a href="index.php" class="d-block text-dark bg-light p-2">Ana Sayfa</a>
-                <a href="kulub.php" class="d-block text-dark bg-light p-2">Kulüpler</a>
-                <a href="message_room.php" class="d-block text-dark bg-light p-2">iletişim</a>
-                <a href="bildirim.php" class="d-block text-dark bg-light p-2">Bildirimler</a>
-                <a href="etkinlik.php" class="d-block text-dark bg-light p-2">Etkinlikler</a>
-                <a href="ders_cizergesi.php" class="d-block text-dark bg-light p-2">Ders Çizergesi</a>
-            </div>
-           
+        <?php include '../includes/mobil_menu.php'?>
+        
             <main class="col-md-9 col-lg-10 p-4">
 
-                <!-- Sağ Üst Köşe İkonlar -->
- <div class="top-icons">
-    <i class="bi bi-moon"></i> <!-- Gece Modu İkonu -->
-    <i class="bi bi-bell"></i> <!-- Bildirim Çanı İkonu -->
-    <i class="bi bi-chat-dots"></i> <!-- Mesajlar İkonu -->
-    <i class="bi bi-person-circle"></i> <!-- Profil İkonu -->
-</div>
-
-                <h1 class="mb-4">Kulüple ilgili istek/dilek/şikayet</h1>
-                <form>
-                    <!-- Form Text 1 -->
-                    <div class="mb-3">
-                        <label for="clubName" class="form-label">Kulüp Adı</label>
-                        <select class="form-select" id="clubName">
-                            <option value="" disabled selected>Bir kulüp seçin</option>
-                            <option value="club1">Kulüp 1</option>
-                            <option value="club2">Kulüp 2</option>
-                            <option value="club3">Kulüp 3</option>
-                            <option value="club4">Kulüp 4</option>
-                        </select>
-                        <div id="clubNameHelp" class="form-text">Kulüp adını doğru seçtiğinizden emin olun.</div>
-                    </div>
-                    <!-- Form Text 2 -->
-                    <div class="mb-3">
-                        <label for="clubDescription" class="form-label">Açıklama</label>
-                        <textarea class="form-control" id="clubDescription" rows="3" placeholder="Kulüp hakkında açıklama yapın"></textarea>
-                        <div id="clubDescriptionHelp" class="form-text">Kulüple ilgili şikayetlerinizi ve fikirlerinizi belirtin</div>
-                    </div>
-                    <!-- Gönder Butonu -->
-                    <button type="button" class="btn btn-primary" style="margin-left: 0;">Gönder</button>
-                
-                </form>
-            </main>
+<h1 class="mb-4">Kulüple ilgili istek/dilek/şikayet</h1>
+<form>
+    <!-- Kulüp Adları -->
+    <div class="mb-3">
+        <label for="clubName" class="form-label">Kulüp Adı</label>
+        <select class="form-select" id="clubName">
+            <option value="" disabled selected>Bir kulüp seçin</option>
+            <?php foreach ($clubs as $club): ?>
+                <option value="<?php echo $club['id']; ?>"  data-president-id="<?php echo $club['clubpresident_id']; ?>"><?php echo htmlspecialchars($club['name']); ?></option>
+            <?php endforeach; ?>
+        </select>
+        <div id="clubNameHelp" class="form-text">Kulüp adını doğru seçtiğinizden emin olun.</div>
+    </div>
+    <!-- Açıklama Yazısı -->
+    <div class="mb-3">
+        <label for="clubDescription" class="form-label">Açıklama</label>
+        <textarea class="form-control" id="clubDescription" rows="3" placeholder="Kulüple ilgili İsteklerinizi, şikayetlerinizi ve fikirlerinizi belirtin"></textarea>
+        <div id="clubDescriptionHelp" class="form-text">Kulüple ilgili şikayetlerinizi ve fikirlerinizi belirtin</div>
+    </div>
+    <!-- Gönder Butonu -->
+    <button type="button" class="btn btn-primary" id="sendMessage" >Gönder</button>
+    <div id="messageResponse" class="mt-3"></div>
+</form>
+</main>
         </div>
     </div>
     <?php include_once '../includes/right_top_menu.php'; ?>
     <!-- Bootstrap JS (Optional for some functionality) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
     <script>
-          document.getElementById("toggleSidebar").addEventListener("click", function () {
-            document.getElementById("sidebar").classList.toggle("collapsed");
+     
+     document.getElementById("sendMessage").addEventListener("click", function () {
+            const clubId = document.getElementById("clubName").value;
+            const message = document.getElementById("clubDescription").value;
+            const responseDiv = document.getElementById("messageResponse");
+            const selectedOption = document.getElementById("clubName").options[document.getElementById("clubName").selectedIndex];
+            const clubpresident_id = selectedOption.getAttribute("data-president-id");
+
+            if (!clubId || !message) {
+                responseDiv.innerHTML = '<div class="alert alert-danger">Lütfen tüm alanları doldurun!</div>';
+                return;
+            }
+            // AJAX isteği gönder
+            $.ajax({
+                url: '../backend/message_send.php',
+                type: 'POST',
+                data: {
+                    club_id: clubId,
+                    message: message,
+                    clubpresident_id: clubpresident_id
+                },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        responseDiv.innerHTML = '<div class="alert alert-success">' + response.message + '</div>';
+                        document.getElementById("clubDescription").value = '';
+                        document.getElementById("clubName").value = '';
+                    } else {
+                        responseDiv.innerHTML = '<div class="alert alert-danger">' + response.message + '</div>';
+                    }
+                    
+                },
+                error: function(xhr, status, error) {
+                    console.log('Error:', error);
+                    responseDiv.innerHTML = '<div class="alert alert-danger">Bir hata oluştu. Lütfen tekrar deneyin.</div>';
+                }
+            });
         });
-
-        document.getElementById("submitButton").addEventListener("click", function () {
-        const clubName = document.getElementById("clubName").value;
-        const clubDescription = document.getElementById("clubDescription").value;
-
-        if (!clubName || !clubDescription) {
-            alert("Lütfen tüm alanları doldurun!");
-        } else {
-            alert("Gönderildi! Kulüp Adı: " + clubName + ", Açıklama: " + clubDescription);
-            // Burada form verilerini işleyebilirsiniz (ör. AJAX ile gönderebilirsiniz).
-        }
-    });
     </script>
 </body>
 </html>

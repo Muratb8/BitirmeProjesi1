@@ -72,6 +72,7 @@ $role = $_SESSION['role']; // Kullanıcının rolünü al
         <div class="row">
 
         <?php include '../includes/sidebar.php'; ?>
+        <?php include '../includes/mobil_menu.php'?>
     <div class="container">
         <h2 class="form-title">Etkinlik Yaratma</h2>
 

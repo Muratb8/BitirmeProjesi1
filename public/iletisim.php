@@ -118,7 +118,7 @@ h2 {
 <body>
 
 <?php include '../includes/sidebar.php'; ?>
-
+<?php include '../includes/mobil_menu.php'?>
     <div class="content" id="content">
         <h2>Önemli Kişiler</h2>
         

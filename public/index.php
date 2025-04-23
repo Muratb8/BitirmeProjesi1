@@ -74,11 +74,11 @@ if($role == 'developer'){
             <main class="col-md-9 col-lg-10 p-4">
               
                
-<!-- Profil Bilgileri -->
-<div class="text-center mb-4">
-    <img src="https://via.placeholder.com/120" alt="Profil Resmi" class="profile-img mb-3 rounded-circle border border-3 border-primary">
-    <h5 class="fw-bold">   <?php if (!empty($studentInfo)): echo htmlspecialchars($studentInfo['first_name'] . " " . $studentInfo['last_name']); ?></h5><?php else: ?> <?php endif; ?>
-</div>
+            <!-- Profil Bilgileri -->
+            <div class="text-center mb-4">
+            <img src="https://via.placeholder.com/120" alt="Profil Resmi" class="profile-img mb-3 rounded-circle border border-3 border-primary">
+            <h5 class="fw-bold">   <?php if (!empty($studentInfo)): echo htmlspecialchars($studentInfo['first_name'] . " " . $studentInfo['last_name']); ?></h5><?php else: ?> <?php endif; ?>
+            </div>
 
 <?php if ($role == 'student'): ?>
     <div class="card mb-3">
@@ -115,14 +115,14 @@ if($role == 'developer'){
                     <strong>Cinsiyet:</strong> 
                     <span class="text-muted"><?php echo htmlspecialchars($studentInfo['gender']); ?></span>
                 </div>
-            <?php else: ?>
+            
                
             <?php endif; ?>
         </div>
     </div>
-<?php endif; ?>
-           <!-- Üye Olunan Kulüpler -->
-     <?php if (empty($studentInfo)): ?>
+
+              <!-- Üye Olunan Kulüpler -->
+              <?php if (empty($studentInfo)): ?>
         <?php else: ?>
            <?php if ($has_clubs): ?>
            <div class="row">
@@ -146,10 +146,22 @@ if($role == 'developer'){
         Henüz bir kulübe üye değilsiniz.
     </div>
 <?php endif; ?>
+
 <?php endif; ?>
 
+<div class="col-md-6">
+                        <div class="card p-4 mb-3">
+                            <h5 class="fw-bold">Etkinlik</h5>
+                            <p><strong>Tarih:</strong> 15 Ağustos 2024</p>
+                            <p><strong>Yer:</strong> Konferans Salonu</p>
+                        </div>
+                    </div>
+<?php endif; ?>
+ 
+
+<?php if ($role == 'developer'): ?>
 <div class="container mt-5">
-    <?php if ($role == 'developer'): ?>
+
         <div class="row">
             <!-- Kulüp Yaratma Kartı -->
             <div class="col-md-6 mb-4">
@@ -201,14 +213,12 @@ if($role == 'developer'){
                         </div>
                         <button type="submit" class="btn btn-primary">Kullanıcı Ekle</button>
                     </form>
-                </div>
-            </div>
-        </div>
-    <?php endif; ?>
-</div>
-<div class="row mb-3">
-    <div class="col-md-12">
-        <!-- Öğrenci Bilgileri Düzenle Card'ı -->
+                                      </div>
+                             </div>
+                     </div>
+                     <div class="row mb-3">
+                  <div class="col-md-12">
+               <!-- Öğrenci Bilgileri Düzenle Card'ı -->
         <div class="card">
             <div class="card-header bg-primary text-white">
                 <h5 class="mb-0">Öğrenci Bilgilerini Düzenle</h5>
@@ -239,6 +249,8 @@ if($role == 'developer'){
                         <?php endforeach; ?>
                     </select>
                 </div>
+                </div>
+         
 
                 <!-- Öğrenci Bilgileri (Dinamik Olarak Gösterilecek) -->
                 <div class="mb-3">
@@ -273,9 +285,8 @@ if($role == 'developer'){
             </div>
         </div>
     </div>
-</div>
 
-<div class="row mb-3">
+    <div class="row mb-3">
     <div class="col-md-12">
         <!-- Öğrenci Bilgileri Düzenle Card'ı -->
         <div class="card">
@@ -315,11 +326,10 @@ if($role == 'developer'){
                 <button id="presidentsaveButton" class="btn btn-primary">Kaydet</button>
             </div>
         </div>
+     </div>
     </div>
-</div>
 
-
-<div class="row mb-3">
+    <div class="row mb-3">
     <div class="col-md-12">
         <!-- Aktivite Merkezi Sorumlusu Bilgileri Düzenle Card'ı -->
         <div class="card">
@@ -361,24 +371,22 @@ if($role == 'developer'){
                     </div>
                            </div>
                                 </div>
+                                     </div>
 
+     <?php endif; ?>
 
-                    <div class="col-md-6">
-                        <div class="card p-4 mb-3">
-                            <h5 class="fw-bold">Etkinlik</h5>
-                            <p><strong>Tarih:</strong> 15 Ağustos 2024</p>
-                            <p><strong>Yer:</strong> Konferans Salonu</p>
-                        </div>
-                    </div>
+               
                 </div>
+             
             </main>
- 
+                            
         </div>
       
     </div>
 
 
     <?php include_once '../includes/right_top_menu.php'; ?>
+    
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 

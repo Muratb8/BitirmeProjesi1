@@ -1,5 +1,12 @@
 <?php
+session_start();
 require_once 'database.php'; // Veritabanı bağlantı dosyanız
+
+
+if (!isset($_SESSION['id'])) {
+    echo json_encode(['success' => false, 'message' => 'Oturum açmanız gerekiyor']);
+    exit();
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user_id = $_POST['user_id'] ?? null;
