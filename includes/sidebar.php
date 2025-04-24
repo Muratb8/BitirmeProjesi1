@@ -57,7 +57,7 @@
         <a href="duyuru_yaratma.php"><i class="bi bi-megaphone-fill"></i> Duyuru Yaratma</a>
         <a href="kulup_bilgileri(baskan).php"><i class="bi bi-info-circle-fill"></i> Kulüp Bilgileri</a>
         <a href="basvuru.php"><i class="bi bi-file-earmark-person-fill"></i> Başvurular</a>
-        <a href="kulub_bilgileri.php"><i class="bi bi-clipboard-data-fill"></i> Kulüp Bilgileri</a>
+        <a href="kulub_bilgileri.php"><i class="bi bi-clipboard-data-fill"></i> Aktivite Merkezi Kulüp Bilgileri</a>
         <a href="kulup_yaratma.php"><i class="bi bi-clipboard-data-fill"></i> Kulüp Yaratma</a>
         <a href="aktivite_merkezi_sorumlusu.php"><i class="bi bi-clipboard-data-fill"></i> Aktivite Merkezi Sorumlusunun, Etkinlik Gözlem yeri</a>
         <a href="ders_cizergesi.php"><i class="bi bi-clipboard-data-fill"></i> Ders Çizergesi</a>

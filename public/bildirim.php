@@ -5,17 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bildirimler</title>
     <?php
-session_start();
-if (!isset($_SESSION['id'])) {
-    header("Location: ../public/giris.php");
-    exit();
-}
+    session_start();
+    if (!isset($_SESSION['id'])) {
+        header("Location: giris.php");
+        exit();
+    }
 
-$role = $_SESSION['role']; // Kullanıcının rolünü al
+    $role = $_SESSION['role']; // Kullanıcının rolünü al
 
-?>
+    require_once '../backend/database.php';
+    $db = new Database();
+    
+    
+    // Bildirimleri veritabanından çek
+    $sql = "SELECT * FROM notifications WHERE user_id = ? ORDER BY created_at DESC";
+    $notifications = $db->getAllRecords($sql, [$_SESSION['id']]);
+
+    // Bildirimleri okundu olarak işaretle
+    $updateSql = "UPDATE notifications SET status = 'read' WHERE user_id = ? AND status = 'unread'";
+    $db->execute($updateSql, [$_SESSION['id']]);
+
+    // Bildirim silme işlemi
+    if (isset($_POST['delete_notification']) && isset($_POST['notification_id'])) {
+        $notification_id = $_POST['notification_id'];
+        $delete_sql = "DELETE FROM notifications WHERE id = ? AND user_id = ?";
+        $db->execute($delete_sql, [$notification_id, $_SESSION['id']]);
+        
+        // Sayfayı yeniden yükle
+        header("Location: bildirim.php");
+        exit();
+    }
+    ?>
     <!-- Harici CSS dosyası -->
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/style.css">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Google Fonts -->
@@ -23,8 +45,6 @@ $role = $_SESSION['role']; // Kullanıcının rolünü al
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <!-- Custom CSS -->
     <style>
-       
-  
         .notification-card {
             background-color: #ffffff;
             border: 1px solid #ccc;
@@ -34,6 +54,34 @@ $role = $_SESSION['role']; // Kullanıcının rolünü al
             margin-bottom: 15px;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
+
+        /* Etkinlik bildirimleri için stil */
+        .notification-card.event {
+            border-left: 4px solid #28a745; /* Yeşil */
+        }
+        .notification-card.event .notification-dot {
+            background-color: #28a745;
+        }
+        .notification-card.event .join-button {
+            background-color: #28a745;
+        }
+
+        /* Duyuru bildirimleri için stil */
+        .notification-card.announcement {
+            border-left: 4px solid #0d6efd; /* Mavi */
+        }
+        .notification-card.announcement .notification-dot {
+            background-color: #0d6efd;
+        }
+
+        /* Bilgi bildirimleri için stil */
+        .notification-card.information {
+            border-left: 4px solid #ffc107; /* Sarı */
+        }
+        .notification-card.information .notification-dot {
+            background-color: #ffc107;
+        }
+
         .notification-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
@@ -55,12 +103,10 @@ $role = $_SESSION['role']; // Kullanıcının rolünü al
             width: 10px;
             height: 10px;
             border-radius: 50%;
-            background-color: #0d6efd;
             display: inline-block;
             margin-right: 10px;
         }
         .notification-card .join-button {
-            background-color: #28a745; /* Yeşil renk */
             color: white;
             border: none;
             padding: 8px 15px;
@@ -70,76 +116,107 @@ $role = $_SESSION['role']; // Kullanıcının rolünü al
             transition: background-color 0.3s ease;
         }
         .notification-card .join-button:hover {
-            background-color: #218838; /* Hover durumunda daha koyu yeşil */
+            opacity: 0.9;
         }
-      
+        .notification-card.read {
+            opacity: 0.7;
+        }
+        .notification-card.read .notification-dot {
+            opacity: 0.7;
+        }
+        
+        .notification-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 10px;
+        }
+        
+        .delete-button {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 0.9rem;
+        }
+        
+        .delete-button:hover {
+            background-color: #c82333;
+        }
+        
+        .delete-button i {
+            margin-right: 5px;
+        }
     </style>
 </head>
 <body>
     <div class="container-fluid">
         <div class="row">
-        <?php include '../includes/sidebar.php'; ?>
+        <?php include_once '../includes/sidebar.php'; ?>
             <!-- Mobil Hamburger Menü -->
-        <?php include '../includes/mobil_menu.php'?>
+            <?php include_once '../includes/mobil_menu.php'; ?>
+           
 
             <!-- Bildirimler Sayfası -->
             <main class="col-md-9 col-lg-10 p-4">
-                 <!-- Arama ve Profil Alanı -->
-
+         
+                <!-- Arama ve Profil Alanı -->
+                <button id="toggleSidebar" class="btn btn-primary position-fixed" style="top: 10px; left: 10px; z-index: 1000;">
+                    <i class="bi bi-list"></i>
+                </button>
                 <h2>Bildirimler</h2>
-                <div class="notification-card" id="notification-1">
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <span class="notification-dot"></span>
-                            <span class="notification-header">Yeni Etkinlik: Spor Turnuvası</span>
+                
+                <?php if (empty($notifications)): ?>
+                    <div class="alert alert-info">
+                        Henüz bildiriminiz bulunmamaktadır.
+                    </div>
+                <?php else: ?>
+                    <?php foreach ($notifications as $notification): ?>
+                        <div class="notification-card <?php echo $notification['status'] === 'read' ? 'read' : ''; ?> <?php echo $notification['type']; ?>" 
+                             id="notification-<?php echo $notification['id']; ?>">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <span class="notification-dot"></span>
+                                    <span class="notification-header"><?php echo htmlspecialchars($notification['title']); ?></span>
+                                </div>
+                                <div class="notification-time">
+                                    <?php 
+                                        $date = new DateTime($notification['created_at']);
+                                        echo $date->format('d.m.Y H:i');
+                                    ?>
+                                </div>
+                            </div>
+                            <div class="notification-body">
+                                <?php echo htmlspecialchars($notification['content']); ?>
+                            </div>
+                            <div class="notification-actions">
+                                <?php if ($notification['type'] === 'event'): ?>
+                                    <button class="join-button">
+                                        Katıl
+                                    </button>
+                                <?php endif; ?>
+                                <form method="POST" style="display: inline; margin-left: 10px;" onsubmit="return confirm('Bu bildirimi silmek istediğinizden emin misiniz?');">
+                                    <input type="hidden" name="notification_id" value="<?php echo $notification['id']; ?>">
+                                    <button type="submit" name="delete_notification" class="delete-button">
+                                        <i class="bi bi-trash"></i> Sil
+                                    </button>
+                                </form>
+                            </div>
                         </div>
-                        <div class="notification-time">3 saat önce</div>
-                    </div>
-                    <div class="notification-body">
-                        Spor kulübü tarafından düzenlenen yıl sonu turnuvası hakkında detayları öğrenmek için tıklayın.
-                    </div>
-                    <button class="join-button" onclick="joinEvent('notification-1')">Katıl</button>
-                </div>
-                <div class="notification-card" id="notification-2">
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <span class="notification-dot"></span>
-                            <span class="notification-header">Sanat Galerisi Açılışı</span>
-                        </div>
-                        <div class="notification-time">1 gün önce</div>
-                    </div>
-                    <div class="notification-body">
-                        Sanat kulübü yeni açılacak galerisini tanıtmak için bir etkinlik düzenliyor. Katılımınızı bekliyoruz!
-                    </div>
-                    <button class="join-button" onclick="joinEvent('notification-2')">Katıl</button>
-                </div>
-                <div class="notification-card" id="notification-3">
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <span class="notification-dot"></span>
-                            <span class="notification-header">Bilimsel Konferans</span>
-                        </div>
-                        <div class="notification-time">2 gün önce</div>
-                    </div>
-                    <div class="notification-body">
-                        Bilim kulübü tarafından düzenlenen konferansın detaylarına göz atın.
-                    </div>
-                    <button class="join-button" onclick="joinEvent('notification-3')">Katıl</button>
-                </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </main>
         </div>
     </div>
-
-      <?php include_once '../includes/right_top_menu.php'; ?>
-
+    
+    <?php include_once '../includes/right_top_menu.php'; ?>
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <script>
-        function joinEvent(notificationId) {
-            // Tıklanan bildirim kartını gizle
-            var notificationCard = document.getElementById(notificationId);
-            notificationCard.style.display = 'none';
-        }
-    </script>
+
 </body>
 </html>

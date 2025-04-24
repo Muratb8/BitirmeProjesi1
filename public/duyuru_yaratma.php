@@ -7,7 +7,7 @@
     <?php
 session_start();
 if (!isset($_SESSION['id'])) {
-    header("Location: ../public/giris.php");
+    header("Location: giris.php");
     exit();
 }
 
@@ -32,12 +32,6 @@ $role = $_SESSION['role']; // Kullanıcının rolünü al
             text-align: center;
             margin-bottom: 30px;
         }
-        
-        .sidebar a:hover {
-            background-color: #0E315A;
-            color: white;
-            border-left: 4px solid #0d6efd;
-        }
     </style>
 </head>
 <body>
@@ -45,30 +39,31 @@ $role = $_SESSION['role']; // Kullanıcının rolünü al
         <div class="row">
 
         <?php include '../includes/sidebar.php'; ?>
-        <?php include '../includes/mobil_menu.php'?>
+                  <!-- Mobil Hamburger Menü -->
+                  <?php include_once '../includes/mobil_menu.php'; ?>
             <!-- Main Content -->
             <div class="col-md-9 col-lg-10">
                 <div class="container">
                     <h2 class="form-title">Duyuru Yaratma</h2>
-                    <form>
+                    <form id="announcementForm">
                         <!-- Duyuru Başlığı -->
                         <div class="mb-3">
                             <label for="announcementTitle" class="form-label">Duyuru Başlığı</label>
-                            <input type="text" class="form-control" id="announcementTitle" placeholder="Duyuru başlığını girin" required>
+                            <input type="text" class="form-control" id="announcementTitle" name="title" placeholder="Duyuru başlığını girin" required>
                             <div id="announcementTitleHelp" class="form-text">Duyuru başlığını doğru girin, başlık önemlidir.</div>
                         </div>
 
                         <!-- Duyuru İçeriği -->
                         <div class="mb-3">
                             <label for="announcementContent" class="form-label">Duyuru İçeriği</label>
-                            <textarea class="form-control" id="announcementContent" rows="4" placeholder="Duyuru içeriğini buraya yazın" required></textarea>
+                            <textarea class="form-control" id="announcementContent" name="content" rows="4" placeholder="Duyuru içeriğini buraya yazın" required></textarea>
                             <div id="announcementContentHelp" class="form-text">Duyuru içeriğini ayrıntılı bir şekilde yazın.</div>
                         </div>
 
                         <!-- Duyuru Kategorisi -->
                         <div class="mb-3">
                             <label for="announcementCategory" class="form-label">Duyuru Kategorisi</label>
-                            <select class="form-select" id="announcementCategory" required>
+                            <select class="form-select" id="announcementCategory" name="category" required>
                                 <option value="" disabled selected>Bir kategori seçin</option>
                                 <option value="general">Genel</option>
                                 <option value="event">Etkinlik</option>
@@ -81,7 +76,7 @@ $role = $_SESSION['role']; // Kullanıcının rolünü al
                         <!-- Gönderme Zamanı -->
                         <div class="mb-3">
                             <label for="announcementDate" class="form-label">Etkinliğin Tarihi</label>
-                            <input type="datetime-local" class="form-control" id="announcementDate" required>
+                            <input type="datetime-local" class="form-control" id="announcementDate" name="date" required>
                             <div id="announcementDateHelp" class="form-text">Etkinliğin tarihi ve saati seçin.</div>
                         </div>
 
@@ -90,6 +85,7 @@ $role = $_SESSION['role']; // Kullanıcının rolünü al
                             <button type="submit" class="btn btn-primary">Duyuruyu Gönder</button>
                         </div>
                     </form>
+                    <div id="responseMessage" class="mt-3"></div>
                 </div>
             </div>
         </div>
@@ -98,5 +94,39 @@ $role = $_SESSION['role']; // Kullanıcının rolünü al
     <!-- Bootstrap JS ve Popper -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#announcementForm').on('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = {
+                    title: $('#announcementTitle').val(),
+                    content: $('#announcementContent').val(),
+                    category: $('#announcementCategory').val(),
+                    date: $('#announcementDate').val()
+                };
+
+                $.ajax({
+                    url: '../backend/announcement_send.php',
+                    type: 'POST',
+                    data: formData,
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) {
+                            $('#responseMessage').html('<div class="alert alert-success">' + response.message + '</div>');
+                            $('#announcementForm')[0].reset();
+                        } else {
+                            $('#responseMessage').html('<div class="alert alert-danger">' + response.message + '</div>');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        $('#responseMessage').html('<div class="alert alert-danger">Bir hata oluştu. Lütfen tekrar deneyin.</div>');
+                        console.log('Error:', error);
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>

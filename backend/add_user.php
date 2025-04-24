@@ -1,7 +1,7 @@
 <?php
-session_start();
-include_once 'database.php';
 
+include_once 'database.php';
+session_start();
 if (!isset($_SESSION['id'])) {
     echo json_encode(['success' => false, 'message' => 'Oturum açmanız gerekiyor']);
     exit();
@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
      if ($existingUser) {
         // Eğer e-posta zaten varsa, oturuma hata mesajı ekle
         $_SESSION['message'] = ['text' => 'Bu e-posta adresi zaten kayıtlı!', 'type' => 'danger'];
-        header("Location: index.php");
+        header("Location: ../public/index.php");
         exit;
     }
     // Yeni kullanıcı ekle
@@ -41,11 +41,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     // Eğer kulüp başkanı ise, 'club_presidents' tablosuna ekle
     if ($userRole == 'club_president') {
-        $db->insertData('club_presidents', ['user_id' => $userId]);
+        $db->insertData('clubpresidents', ['user_id' => $userId]);
     }
       // Başarılı bir şekilde kullanıcı eklediysen, oturuma başarı mesajı ekle
       $_SESSION['message'] = ['text' => 'Kullanıcı başarıyla kaydedildi!', 'type' => 'success'];
+      
     // Kullanıcıyı index sayfasına yönlendirmek için header kullanılabilir
-    header("Location: index.php");
+    header("Location: ../public/index.php");
 }
 ?>

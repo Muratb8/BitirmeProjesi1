@@ -193,31 +193,33 @@ if($role == 'developer'){
                 </div>
             </div>
 
-            <!-- Kullanıcı Ekleme Kartı -->
+            </div>
+           </div>
+                                       <!-- Kullanıcı Ekleme Kartı -->
             <div class="col-md-6 mb-4">
                 <div class="card p-4">
                     <h5 class="fw-bold mb-3">Kullanıcı Ekle</h5>
-                    <form action="add_user.php" method="POST">
-                        <div class="mb-3">
-                            <label for="userEmail" class="form-label">E-posta</label>
-                            <input type="email" class="form-control" id="userEmail" name="userEmail" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="userRole" class="form-label">Rol Seç</label>
-                            <select class="form-control" id="userRole" name="userRole" required>
-                                <option value="student">Öğrenci</option>
-                                <option value="club_president">Kulüp Başkanı</option>
-                                <option value="manager">Yönetici</option>
-                                <option value="developer">Geliştirici</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Kullanıcı Ekle</button>
-                    </form>
-                                      </div>
-                             </div>
-                     </div>
-                     <div class="row mb-3">
-                  <div class="col-md-12">
+                    <form id="addUserForm" action="../backend/add_user.php" method="POST">
+    <div class="mb-3">
+        <label for="userEmail" class="form-label">E-posta</label>
+        <input type="email" class="form-control" id="userEmail" name="userEmail" required>
+    </div>
+    <div class="mb-3">
+        <label for="userRole" class="form-label">Rol Seç</label>
+        <select class="form-control" id="userRole" name="userRole" required>
+            <option value="student">Öğrenci</option>
+            <option value="club_president">Kulüp Başkanı</option>
+            <option value="manager">Yönetici</option>
+            <option value="developer">Geliştirici</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Kullanıcı Ekle</button>
+</form>
+<div id="messageBox" class="mt-3"></div>
+                </div>
+             </div>
+    <div class="row mb-3">
+     <div class="col-md-12">
                <!-- Öğrenci Bilgileri Düzenle Card'ı -->
         <div class="card">
             <div class="card-header bg-primary text-white">
@@ -238,6 +240,8 @@ if($role == 'developer'){
                                     data-birth-place="<?php echo htmlspecialchars($student['birth_place']); ?>"
                                     data-birth-date="<?php echo htmlspecialchars($student['birth_date']); ?>"
                                     data-gender="<?php echo htmlspecialchars($student['gender']); ?>"
+                                    data-phone-number="<?php echo htmlspecialchars($student['phone_number']); ?>"
+                                      data-student-number="<?php echo htmlspecialchars($student['student_number']); ?>"
                             >
                                 
             <?php 
@@ -278,9 +282,25 @@ if($role == 'developer'){
                     <input type="date" class="form-control" id="birthDate" name="birth_date" >
                 </div>
                 <div class="mb-3">
-                    <label for="gender" class="form-label">Cinsiyet:</label>
-                    <input type="text" class="form-control" id="gender" name="gender" >
+                <label for="gender" class="form-label">Cinsiyet:</label>
+                <select class="form-select" id="gender" name="gender" required>
+                <option value="">Seçiniz</option>
+              <option value="erkek">Erkek</option>
+             <option value="kadın">Kadın</option>
+             <option value="diğer">Diğer</option>
+              </select>
                 </div>
+
+              <!-- Telefon Numarası -->
+            <div class="mb-3">
+             <label for="phone" class="form-label">Telefon Numarası:</label>
+             <input type="text" class="form-control" id="phoneNumber" name="phone_number" pattern="[0-9]{12}" placeholder="12 haneli telefon numarası" required>
+            </div>
+            <!-- Öğrenci Numarası -->
+            <div class="mb-3">
+             <label for="studentNumber" class="form-label">Öğrenci Numarası:</label>
+             <input type="text" class="form-control" id="studentNumber" name="student_number" required>
+            </div>
                 <button id="saveButton" class="btn btn-primary">Kaydet</button>
             </div>
         </div>
@@ -328,7 +348,7 @@ if($role == 'developer'){
         </div>
      </div>
     </div>
-
+                                     
     <div class="row mb-3">
     <div class="col-md-12">
         <!-- Aktivite Merkezi Sorumlusu Bilgileri Düzenle Card'ı -->
@@ -371,7 +391,6 @@ if($role == 'developer'){
                     </div>
                            </div>
                                 </div>
-                                     </div>
 
      <?php endif; ?>
 
@@ -389,8 +408,36 @@ if($role == 'developer'){
     
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+$(document).ready(function () {
+$('#addUserForm').on('submit', function (e) {
+        e.preventDefault();
+
+        const formData = $(this).serialize(); // Formdaki verileri al
+
+        $.ajax({
+            url: '../backend/add_user.php',
+            type: 'POST',
+            data: formData,
+            dataType: 'json',
+            success: function (response) {
+                const box = $('#messageBox');
+                if (response.success) {
+                    box.html(`<div class="alert alert-success">${response.message}</div>`);
+                    $('#addUserForm')[0].reset(); // formu sıfırla
+                } else {
+                    box.html(`<div class="alert alert-danger">${response.message}</div>`);
+                }
+            },
+            error: function () {
+                $('#messageBox').html('<div class="alert alert-danger">Bir hata oluştu.</div>');
+            }
+        });
+    });
+
+
+
 document.getElementById('saveButton').addEventListener('click', function () {
     let user_id = document.getElementById('studentSelect').value;
     let first_name = document.getElementById('firstName').value;
@@ -400,7 +447,10 @@ document.getElementById('saveButton').addEventListener('click', function () {
     let birth_place = document.getElementById('birthPlace').value;
     let birth_date = document.getElementById('birthDate').value;
     let gender = document.getElementById('gender').value;
+    let phone_number = document.getElementById('phoneNumber').value;
+    let student_number = document.getElementById('studentNumber').value;
 
+    // Öğrenci seçilip seçilmediğini kontrol et
     if (!user_id) {
         alert("Lütfen bir öğrenci seçin!");
         return;
@@ -415,7 +465,10 @@ document.getElementById('saveButton').addEventListener('click', function () {
     formData.append("birth_place", birth_place);
     formData.append("birth_date", birth_date);
     formData.append("gender", gender);
+    formData.append("phone_number", phone_number);
+    formData.append("student_number", student_number);
 
+    // POST isteğini yap
     fetch("../backend/update_student.php", {
         method: "POST",
         body: formData
@@ -445,7 +498,8 @@ document.getElementById('saveButton').addEventListener('click', function () {
             var birthPlace = selectedOption.getAttribute('data-birth-place');
             var birthDate = selectedOption.getAttribute('data-birth-date');
             var gender = selectedOption.getAttribute('data-gender');
-
+            var phoneNumber = selectedOption.getAttribute('data-phone-number');
+            var studentNumber = selectedOption.getAttribute('data-student-number');
             // Inputları doldur
             document.getElementById('firstName').value = firstName;
             document.getElementById('lastName').value = lastName;
@@ -454,6 +508,8 @@ document.getElementById('saveButton').addEventListener('click', function () {
             document.getElementById('birthPlace').value = birthPlace;
             document.getElementById('birthDate').value = birthDate;
             document.getElementById('gender').value = gender;
+            document.getElementById('phoneNumber').value = phoneNumber;
+            document.getElementById('studentNumber').value = studentNumber;
         }
     });
 
@@ -553,6 +609,9 @@ document.getElementById('saveButton').addEventListener('click', function () {
     })
     .catch(error => console.error("Hata oluştu:", error));
 });
+});
+
+
     </script>
 </body>
 </html>

@@ -20,118 +20,11 @@ if (!isset($_SESSION['id'])) {
 $role = $_SESSION['role']; // Kullanıcının rolünü al
 
 // Veritabanı bağlantısı ve kulüpleri çekme
-require_once 'database.php';
+require_once '../backend/database.php';
 $db = new Database();
 $db->getConnection();
 $clubs = $db->getData('clubs', 'id, name, clubpresident_id');
 ?>
-    <!-- Custom CSS -->
-    <style>
-       
-        .club-container {
-            position: absolute;
-            top: 50px;
-            left: 320px; /* Biraz daha sağa kaydırıldı */
-            display: flex;
-            flex-direction: column;
-        }
-        .club-box {
-            background-color: #ffffff;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 15px 60px; /* Dikey küçültüldü, yatay büyütüldü */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s, background-color 0.3s;
-            font-size: 1.2rem;
-            text-align: center;
-            cursor: pointer;
-        }
-        .club-box + .club-box {
-            margin-top: 0; /* Aradaki boşluk kaldırıldı */
-        }
-        .club-box:hover {
-            transform: scale(1.05);
-            background-color: #f8f9fa;
-        }
-        .club-box.active {
-            background-color: #0d6efd;
-            color: white;
-        }
-        footer {
-            background-color: #212529;
-            color: white;
-            padding: 10px 0;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-        .notification-dot {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            width: 20px;
-            height: 20px;
-            background-color: red;
-            color: white;
-            font-size: 14px;
-            font-weight: bold;
-            text-align: center;
-            line-height: 20px;
-            border-radius: 50%;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-        }
-
-        .club-box {
-            position: relative; /* Kareyi doğru konumlandırmak için relative konumlandırma */
-        }
-
-        .club-box.active::after {
-            background-color: #0d6efd; /* Tıklandığında kare görünür hale gelir */
-        }
-
-        .selected-box {
-            position: absolute;
-            width: 200px;
-            height: 200px;
-            background-color: rgba(0, 123, 255, 0.5);
-            border: 2px solid #007bff;
-            display: none; /* Başlangıçta görünmez */
-            z-index: 10;
-            transition: all 0.3s ease-in-out;
-        }
-        .chat-box {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 60%;
-            height: 70%;
-            background-color: #ffffff;
-            border: 2px solid #0d6efd;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            z-index: 1000;
-            display: none; /* Başlangıçta görünmez */
-            overflow: hidden;
-        }
-
-        .chat-box-header {
-            background-color: #0d6efd;
-            color: white;
-            padding: 10px;
-            text-align: center;
-            font-weight: bold;
-            font-size: 1.5rem;
-        }
-
-        .chat-box-content {
-            padding: 20px;
-            overflow-y: auto;
-            height: calc(100% - 60px);
-            font-size: 1rem;
-        }
-     
-    </style>
 </head>
 <body>
     <div class="container-fluid">
@@ -142,8 +35,8 @@ $clubs = $db->getData('clubs', 'id, name, clubpresident_id');
         
             <main class="col-md-9 col-lg-10 p-4">
 
-<h1 class="mb-4">Kulüple ilgili istek/dilek/şikayet</h1>
-<form>
+    <h1 class="mb-4">Kulüple ilgili istek/dilek/şikayet</h1>
+    <form>
     <!-- Kulüp Adları -->
     <div class="mb-3">
         <label for="clubName" class="form-label">Kulüp Adı</label>

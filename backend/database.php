@@ -122,6 +122,15 @@ public function insertData($table, $data) {
         $stmt = $this->conn->prepare($sql);
         return $stmt->execute($params);
     }
+
+    public function getRows($query, $params = []) {
+        if ($this->conn === null) {
+            $this->getConnection();
+        }
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute($params);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC); // Çoklu satır döner
+    }
 }
 
 ?>

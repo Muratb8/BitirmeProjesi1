@@ -1,17 +1,19 @@
 <?php
-// Hata mesajlarını gizle
-error_reporting(0);
-ini_set('display_errors', 0);
 
-session_start();
 require_once 'database.php';
-
-// JSON başlığını ayarla
+session_start();
+// JSON yanıtı
 header('Content-Type: application/json');
 
 // Oturum kontrolü
 if (!isset($_SESSION['id'])) {
     echo json_encode(['success' => false, 'message' => 'Oturum açmanız gerekiyor']);
+    exit();
+}
+
+// CSRF kontrolü
+if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== ($_SESSION['csrf_token'] ?? '')) {
+    echo json_encode(['success' => false, 'message' => 'Geçersiz istek']);
     exit();
 }
 
@@ -27,17 +29,25 @@ if (!$club_id || !$message || !$clubpresident_id) {
     exit();
 }
 
+if (!is_numeric($club_id) || !is_numeric($clubpresident_id)) {
+    echo json_encode(['success' => false, 'message' => 'Geçersiz kulüp veya başkan ID']);
+    exit();
+}
+
+if (strlen($message) > 500) {
+    echo json_encode(['success' => false, 'message' => 'Mesaj 500 karakteri aşmamalı']);
+    exit();
+}
+
+// Giriş temizliği (XSS riskine karşı, DB'ye değil ama çıkışta yine filtrelenmeli)
+$clean_message = htmlspecialchars(trim($message), ENT_QUOTES, 'UTF-8');
+
 try {
     $db = new Database();
     $db->getConnection();
 
-    
-    if (!$clubpresident_id) {
-        echo json_encode(['success' => false, 'message' => 'Kulüp başkanı bulunamadı']);
-        exit();
-    }
-
-    $student = $db->getRow("SELECT student_id  FROM students WHERE user_id = ?", [$user_id]);
+    // Öğrenci kimliğini al
+    $student = $db->getRow("SELECT student_id FROM students WHERE user_id = ?", [$user_id]);
 
     if (!$student) {
         echo json_encode(['success' => false, 'message' => 'Öğrenci bulunamadı']);
@@ -46,11 +56,11 @@ try {
 
     $student_id = $student['student_id'];
 
-    // Mesajı veritabanına ekle
+    // Veritabanına ekle
     $data = [
         'student_id' => $student_id,
         'president_id' => $clubpresident_id,
-        'message' => $message,
+        'message' => $clean_message,
         'date' => date('Y-m-d H:i:s')
     ];
 
