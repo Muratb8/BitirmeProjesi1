@@ -36,7 +36,25 @@ if (isset($_SESSION['message'])) {
 $db = new Database();
 $user_id = $_SESSION['id']; // Oturum açmış kullanıcının ID'si
 $user = $db->getRow("SELECT * FROM users WHERE id = ?", [$user_id]);
-$role = $user['role'];
+$currentPage = basename($_SERVER['PHP_SELF']);
+$excludePages = ['giris.php'];
+
+if (!in_array($currentPage, $excludePages)) {
+    $_SESSION['previous_page'] = $_SERVER['REQUEST_URI'];
+}
+$role = $_SESSION['role']; // Kullanıcının rolünü al
+// Sadece "manager" veya "developer" rolüne izin ver
+if ($role !== 'student' && $role !== 'club_president' && $role !== 'manager' && $role !== 'developer') {
+    // Eğer daha önceki sayfa kayıtlıysa oraya dön
+    if (isset($_SESSION['previous_page'])) {
+        header("Location: " . $_SESSION['previous_page']);
+    } else {
+        // Önceki sayfa yoksa varsayılan sayfaya gönder
+        header("Location: ../index.php");
+    }
+    exit();
+}
+
 
 if ($role == 'student') {
     $studentInfo = $db->getRow("SELECT * FROM students WHERE user_id = ?", [$user_id]);

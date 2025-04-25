@@ -14,12 +14,16 @@ class Database {
         try {
             $this->conn = new PDO("mysql:host=" . $this->host . ";dbname=" . $this->db_name . ";charset=utf8", $this->username, $this->password);
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->pdo = $this->conn; // ← Bu satırı ekle
         } catch (PDOException $exception) {
             die("Bağlantı hatası: " . $exception->getMessage());
         }
         return $this->conn;
     }
 
+    public function __construct() {
+        $this->getConnection(); // Sınıf oluşurken bağlantı kurulsun
+    }
     // Tabloya göre veri çekme fonksiyonu
     public function getData($table, $columns = "*", $conditions = "", $params = []) {
         $query = "SELECT $columns FROM $table";

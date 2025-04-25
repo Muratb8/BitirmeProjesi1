@@ -10,7 +10,25 @@ if (!isset($_SESSION['id'])) {
     header("Location: ../public/giris.php");
     exit();
 }
+$currentPage = basename($_SERVER['PHP_SELF']);
+$excludePages = ['giris.php'];
+
+if (!in_array($currentPage, $excludePages)) {
+    $_SESSION['previous_page'] = $_SERVER['REQUEST_URI'];
+}
 $role = $_SESSION['role']; // Kullanıcının rolünü al
+// Sadece "manager" veya "developer" rolüne izin ver
+if ($role !== 'student' && $role !== 'developer') {
+    // Eğer daha önceki sayfa kayıtlıysa oraya dön
+    if (isset($_SESSION['previous_page'])) {
+        header("Location: " . $_SESSION['previous_page']);
+    } else {
+        // Önceki sayfa yoksa varsayılan sayfaya gönder
+        header("Location: ../index.php");
+    }
+    exit();
+}
+
 
 ?>
     <!-- Harici CSS dosyası -->

@@ -14,11 +14,29 @@ if (!isset($_SESSION['id'])) {
     header("Location: giris.php");
     exit();
 }
+$currentPage = basename($_SERVER['PHP_SELF']);
+$excludePages = ['giris.php'];
+
+if (!in_array($currentPage, $excludePages)) {
+    $_SESSION['previous_page'] = $_SERVER['REQUEST_URI'];
+}
 $role = $_SESSION['role']; // Kullanıcının rolünü al
+// Sadece "manager" veya "developer" rolüne izin ver
+if ($role !== 'club_president' && $role !== 'developer') {
+    // Eğer daha önceki sayfa kayıtlıysa oraya dön
+    if (isset($_SESSION['previous_page'])) {
+        header("Location: " . $_SESSION['previous_page']);
+    } else {
+        // Önceki sayfa yoksa varsayılan sayfaya gönder
+        header("Location: ../index.php");
+    }
+    exit();
+}
+
 
 require_once '../backend/database.php';
 $db = new Database();
-
+$db->getConnection();
 
 // Kulüp başkanının bilgilerini güvenli şekilde al
 try {
@@ -248,7 +266,7 @@ try {
 
         function removeMember(userId) {
             if (confirm('Bu üyeyi kulüpten çıkarmak istediğinizden emin misiniz?')) {
-                fetch('remove_member.php', {
+                fetch('../backend/remove_member.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',

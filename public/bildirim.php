@@ -10,12 +10,29 @@
         header("Location: giris.php");
         exit();
     }
-
+    $currentPage = basename($_SERVER['PHP_SELF']);
+    $excludePages = ['giris.php'];
+    
+    if (!in_array($currentPage, $excludePages)) {
+        $_SESSION['previous_page'] = $_SERVER['REQUEST_URI'];
+    }
     $role = $_SESSION['role']; // Kullanıcının rolünü al
+    // Sadece "manager" veya "developer" rolüne izin ver
+    if ($role !== 'student' && $role !=='club_president' && $role !== 'developer') {
+        // Eğer daha önceki sayfa kayıtlıysa oraya dön
+        if (isset($_SESSION['previous_page'])) {
+            header("Location: " . $_SESSION['previous_page']);
+        } else {
+            // Önceki sayfa yoksa varsayılan sayfaya gönder
+            header("Location: ../index.php");
+        }
+        exit();
+    }
+    
 
     require_once '../backend/database.php';
     $db = new Database();
-    
+
     
     // Bildirimleri veritabanından çek
     $sql = "SELECT * FROM notifications WHERE user_id = ? ORDER BY created_at DESC";
@@ -36,8 +53,9 @@
         exit();
     }
     ?>
+   
     <!-- Harici CSS dosyası -->
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Google Fonts -->
@@ -45,6 +63,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <!-- Custom CSS -->
     <style>
+
+    
+
         .notification-card {
             background-color: #ffffff;
             border: 1px solid #ccc;
@@ -162,10 +183,6 @@
             <!-- Bildirimler Sayfası -->
             <main class="col-md-9 col-lg-10 p-4">
          
-                <!-- Arama ve Profil Alanı -->
-                <button id="toggleSidebar" class="btn btn-primary position-fixed" style="top: 10px; left: 10px; z-index: 1000;">
-                    <i class="bi bi-list"></i>
-                </button>
                 <h2>Bildirimler</h2>
                 
                 <?php if (empty($notifications)): ?>
